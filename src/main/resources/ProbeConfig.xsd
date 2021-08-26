@@ -1,0 +1,121 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+      Schema definition for a Serviceprobe configuration file
+      Copyright 2021 D.B. Moore. All rights reserved.
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:element name="probeconfig" type="probeconfigtype"/>
+
+  <xsd:complexType name="probeconfigtype">
+    <xsd:sequence>
+      <xsd:element name="listenerport" type="listenerporttype"/>
+      <xsd:element name="service" type="servicetype"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="listenerporttype">
+    <xsd:attribute name="portnumber" type="xsd:positiveInteger"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="infologtype">
+    <xsd:attribute name="path" type="xsd:string"/>
+    <xsd:attribute name="filename" type="xsd:string"/>
+    <xsd:attribute name="loglevel" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="servicetype">
+    <xsd:sequence>
+      <xsd:element name="target" type="targettype"/>
+      <xsd:element name="alert" type="alerttype"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="targettype">
+    <xsd:sequence>
+      <xsd:element name="infolog" type="infologtype"/>
+      <xsd:element name="server"  type="servertype"/>
+      <xsd:element name="proberate" type="proberatetype"/>
+      <xsd:element name="protocol" type="protocoltype"/>
+    </xsd:sequence>
+    <xsd:attribute name="targettype" type="xsd:string"/> <!-- NOTE: targettype has double usage here. To be fixed -->
+    <xsd:attribute name="secure" type="xsd:string"/>
+    <xsd:attribute name="id" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="servertype">
+    <xsd:attribute name="servername" type="xsd:string"/>
+    <xsd:attribute name="portnumber" type="xsd:positiveInteger"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="proberatetype">
+    <xsd:attribute name="cycle" type="xsd:positiveInteger"/>
+    <xsd:attribute name="unitsize" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="protocoltype">
+    <xsd:sequence>
+      <xsd:element name="request" type="requesttype"/>
+      <xsd:element name="response" type="responsetype"/>
+    </xsd:sequence>
+    <xsd:attribute name="type" type="xsd:string"/>
+    <xsd:attribute name="version" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="requesttype">
+    <xsd:sequence>
+      <xsd:element name="requesturl" type="requesturltype"/>
+    </xsd:sequence>
+    <xsd:attribute name="type" type="xsd:string"/>
+    <xsd:attribute name="method" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="requesturltype">
+    <xsd:attribute name="value" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="responsetype">
+    <xsd:attribute name="type" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="alerttype">
+    <xsd:sequence>
+      <xsd:element name="alerter" type="alertertype"/>
+      <xsd:element name="repeat" type="repeattype"/>
+      <xsd:element name="message" type="messagetype"/>
+      <xsd:element name="blackout" type="blackouttype"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="alertertype">
+    <xsd:sequence>
+      <xsd:element name="who" type="whotype"/>
+    </xsd:sequence>
+    <xsd:attribute name="transport" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="repeattype">
+    <xsd:attribute name="type" type="xsd:string"/>
+    <xsd:attribute name="number" type="xsd:positiveInteger"/>
+    <xsd:attribute name="reset" type="xsd:positiveInteger"/>
+    <xsd:attribute name="unit" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="whotype">
+    <xsd:attribute name="addressee" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="messagetype">
+    <xsd:attribute name="type" type="xsd:string"/>
+    <xsd:attribute name="errtype" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="blackouttype">
+    <xsd:attribute name="days" type="xsd:string"/>
+    <xsd:attribute name="starttime" type="xsd:positiveInteger"/>
+    <xsd:attribute name="endtime" type="xsd:positiveInteger"/>
+  </xsd:complexType>
+
+  <xsd:element name="debug" type="xsd:boolean"/>
+</xsd:schema>

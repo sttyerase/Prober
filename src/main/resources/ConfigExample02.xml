@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!-- THIS IS A PROTOTYPE CONFIG FILE FOR THE SERVICEPROBE -->
+<probeconfig schemaLocation="ProbeConfig.xsd">
+  <listenerport portnumber="27002" />
+  <service>
+    <target targettype="simple_server" secure="false" id="dbmiserver"> <!--  implemented types: HTTP_Server  -->
+      <infolog path="." filename="dbmiserver_ping.log" loglevel="INFO"/>
+      <server servername="dbmiserver" portnumber="0000"/>
+      <proberate cycle="120" unitsize="default"/> <!-- DEFAULT=second : implemented: second,minute,hour -->
+      <protocol type="PING">
+        <request type="ping"/>
+        <response type="exit_code" value="2"/>
+      </protocol>
+    </target>
+    <alert>
+      <alerter transport="email"> <!-- implemented types =  email -->
+        <who addressee="dbmi@techie.com"/>
+      </alerter>
+      <repeat type="LIMITED" number="3" reset="3" unit="hours"/>
+      <message type="text" errtype="default">The server has encountered an unspecified error. Please verify that it is running.</message>
+      <!-- INDIVIDUAL DAYS OVERRIDE WEEKEND OR WEEKDAY SETTINGS -->
+      <blackout days="ALLDAYS"  starttime="0000" endtime="0615" />
+      <blackout days="WEEKDAYS" starttime="2130" endtime="2359" />
+      <blackout days="WEEKDAYS" starttime="0000" endtime="0530" />
+      <blackout days="WEEKENDS" starttime="0000" endtime="0930" />
+      <blackout days="WEEKENDS" starttime="1630" endtime="2359" />
+      <blackout days="FRIDAY"   starttime="0500" endtime="0900" />
+      <blackout days="TUESDAY"  starttime="1500" endtime="2330" />
+      <blackout days="SUNDAY"   starttime="0900" endtime="1600" />
+    </alert>
+  </service>
+</probeconfig>
+
+        <!-- <debug/> if present set probe to provide additional debug information ::: TO BE IMPLEMENTED -->
